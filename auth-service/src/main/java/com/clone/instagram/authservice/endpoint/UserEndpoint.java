@@ -1,29 +1,32 @@
 package com.clone.instagram.authservice.endpoint;
 
-import com.clone.instagram.authservice.exception.*;
+import com.clone.instagram.authservice.exception.ResourceNotFoundException;
 import com.clone.instagram.authservice.model.InstaUserDetails;
 import com.clone.instagram.authservice.model.User;
-import com.clone.instagram.authservice.payload.*;
+import com.clone.instagram.authservice.payload.UserSummary;
 import com.clone.instagram.authservice.service.UserService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestController;
 
 
 @RestController
 @Slf4j
+@RequiredArgsConstructor
 public class UserEndpoint {
 
-    @Autowired
-    private UserService userService;
+    private final UserService userService;
 
     @GetMapping(value = "/users/{username}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> findUser(@PathVariable("username") String username) {
+    public ResponseEntity<User> findUser(@PathVariable("username") String username) {
         log.info("retrieving user {}", username);
 
         return  userService
@@ -33,7 +36,7 @@ public class UserEndpoint {
     }
 
     @GetMapping(value = "/users", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> findAll() {
+    public ResponseEntity<Object> findAll() {
         log.info("retrieving all users");
 
         return ResponseEntity
@@ -41,7 +44,7 @@ public class UserEndpoint {
     }
 
     @GetMapping(value = "/users/summaries", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> findAllUserSummaries(
+    public ResponseEntity<Object> findAllUserSummaries(
             @AuthenticationPrincipal InstaUserDetails userDetails) {
         log.info("retrieving all users summaries");
 
@@ -66,7 +69,7 @@ public class UserEndpoint {
     }
 
     @GetMapping(value = "/users/summary/{username}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> getUserSummary(@PathVariable("username") String username) {
+    public ResponseEntity<UserSummary> getUserSummary(@PathVariable("username") String username) {
         log.info("retrieving user {}", username);
 
         return  userService

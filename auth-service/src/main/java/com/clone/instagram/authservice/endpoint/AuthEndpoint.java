@@ -7,10 +7,13 @@ import com.clone.instagram.authservice.exception.UsernameAlreadyExistsException;
 import com.clone.instagram.authservice.model.Profile;
 import com.clone.instagram.authservice.model.Role;
 import com.clone.instagram.authservice.model.User;
-import com.clone.instagram.authservice.payload.*;
+import com.clone.instagram.authservice.payload.ApiResponse;
+import com.clone.instagram.authservice.payload.JwtAuthenticationResponse;
+import com.clone.instagram.authservice.payload.LoginRequest;
+import com.clone.instagram.authservice.payload.SignUpRequest;
 import com.clone.instagram.authservice.service.UserService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -23,18 +26,19 @@ import java.net.URI;
 
 @RestController
 @Slf4j
+@RequiredArgsConstructor
 public class AuthEndpoint {
 
-    @Autowired private UserService userService;
+    private final UserService userService;
 
     @PostMapping("/signin")
-    public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
+    public ResponseEntity<Object> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
         String token = userService.loginUser(loginRequest.getUsername(), loginRequest.getPassword());
         return ResponseEntity.ok(new JwtAuthenticationResponse(token));
     }
 
     @PostMapping(value = "/users", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> createUser(@Valid @RequestBody SignUpRequest payload) {
+    public ResponseEntity<Object> createUser(@Valid @RequestBody SignUpRequest payload) {
         log.info("creating user {}", payload.getUsername());
 
         User user = User
@@ -61,6 +65,6 @@ public class AuthEndpoint {
 
         return ResponseEntity
                 .created(location)
-                .body(new ApiResponse(true,"User registered successfully"));
+                .body(new ApiResponse(true, "User registered successfully"));
     }
 }

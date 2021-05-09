@@ -3,6 +3,7 @@ package com.clone.instagram.authservice.config;
 
 import com.clone.instagram.authservice.service.JwtTokenProvider;
 import com.clone.instagram.authservice.service.UserService;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpMethod;
@@ -29,13 +30,10 @@ public class SecurityCredentialsConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     private UserDetailsService userDetailsService;
-
     @Autowired
     private JwtConfig jwtConfig;
-
     @Autowired
     private JwtTokenProvider tokenProvider;
-
     @Autowired
     private UserService userService;
 

@@ -3,13 +3,12 @@ package com.clone.instagram.authservice.service;
 import com.clone.instagram.authservice.exception.EmailAlreadyExistsException;
 import com.clone.instagram.authservice.exception.UsernameAlreadyExistsException;
 import com.clone.instagram.authservice.model.Role;
-import com.clone.instagram.authservice.repository.UserRepository;
 import com.clone.instagram.authservice.model.User;
+import com.clone.instagram.authservice.repository.UserRepository;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -19,20 +18,17 @@ import java.util.Optional;
 
 @Service
 @Slf4j
+@AllArgsConstructor
 public class UserService {
 
-    @Autowired
     private PasswordEncoder passwordEncoder;
-    @Autowired
     private UserRepository userRepository;
-    @Autowired
     private AuthenticationManager authenticationManager;
-    @Autowired
     private JwtTokenProvider tokenProvider;
 
 
     public String loginUser(String username, String password) {
-        Authentication authentication = authenticationManager
+        var authentication = authenticationManager
                 .authenticate(new UsernamePasswordAuthenticationToken(username, password));
 
         return tokenProvider.generateToken(authentication);
