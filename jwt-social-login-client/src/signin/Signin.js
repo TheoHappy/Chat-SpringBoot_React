@@ -3,78 +3,23 @@ import { Form, Input, Button, Divider, notification } from "antd";
 import {
   UserOutlined,
   LockOutlined,
-  DingtalkOutlined,
-  FacebookFilled,
+  DingtalkOutlined
 } from "@ant-design/icons";
-import { login, facebookLogin } from "../util/ApiUtil";
 import "./Signin.css";
+import {login} from "../util/ApiUtil";
 
 /*global FB*/
 
 const Signin = (props) => {
   const [loading, setLoading] = useState(false);
-  const [facebookLoading, setFacebookLoading] = useState(false);
   const [test, setTest] = useState(localStorage.getItem("accessToken"));
 
   useEffect(() => {
     if (localStorage.getItem("accessToken") !== null) {
       props.history.push("/");
     }
-    initFacebookLogin();
   }, []);
 
-  useEffect(() => {
-    initFacebookLogin();
-  }, [test]);
-
-  const initFacebookLogin = () => {
-    window.fbAsyncInit = function () {
-      FB.init({
-        appId: "118319422120166",
-        autoLogAppEvents: true,
-        xfbml: true,
-        version: "v7.0",
-      });
-    };
-  };
-
-  const getFacebookAccessToken = () => {
-    setFacebookLoading(true);
-    FB.login(
-      function (response) {
-        if (response.status === "connected") {
-          const facebookLoginRequest = {
-            accessToken: response.authResponse.accessToken,
-          };
-          facebookLogin(facebookLoginRequest)
-            .then((response) => {
-              localStorage.setItem("accessToken", response.accessToken);
-              props.history.push("/");
-              setFacebookLoading(false);
-            })
-            .catch((error) => {
-              if (error.status === 401) {
-                notification.error({
-                  message: "Error",
-                  description: "Invalid credentials",
-                });
-              } else {
-                notification.error({
-                  message: "Error",
-                  description:
-                    error.message ||
-                    "Sorry! Something went wrong. Please try again!",
-                });
-              }
-              setFacebookLoading(false);
-            });
-        } else {
-          console.log(response);
-        }
-      },
-      { scope: "email" }
-    );
-  };
 
   const onFinish = (values) => {
     setLoading(true);
@@ -143,18 +88,6 @@ const Signin = (props) => {
           </Button>
         </Form.Item>
         <Divider>OR</Divider>
-        <Form.Item>
-          <Button
-            icon={<FacebookFilled style={{ fontSize: 20 }} />}
-            loading={facebookLoading}
-            className="login-with-facebook"
-            shape="round"
-            size="large"
-            onClick={getFacebookAccessToken}
-          >
-            Log in With Facebook
-          </Button>
-        </Form.Item>
         Not a member yet? <a href="/signup">Sign up</a>
       </Form>
     </div>
