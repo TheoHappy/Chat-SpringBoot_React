@@ -47,6 +47,14 @@ const Chat = (props) => {
     stompClient.connect({}, onConnected, onError);
   };
 
+  const logout = () => {
+    localStorage.removeItem("accessToken");
+    props.history.push("/login");
+  };
+  const profile = () => {
+    props.history.push("/");
+  };
+
   const onConnected = () => {
     console.log("connected");
     console.log(currentUser);
@@ -176,13 +184,13 @@ const Chat = (props) => {
           </ul>
         </div>
         <div id="bottom-bar">
-          <button id="addcontact">
+          <button id="addcontact" onClick={profile}>
             <i class="fa fa-user fa-fw" aria-hidden="true"></i>{" "}
             <span>Profile</span>
           </button>
-          <button id="settings">
-            <i class="fa fa-cog fa-fw" aria-hidden="true"></i>{" "}
-            <span>Settings</span>
+          <button id="settings" onClick={logout}>
+            <i class="fa fa-sign-out" aria-hidden="true"></i>{" "}
+            <span>Logout</span>
           </button>
         </div>
       </div>
