@@ -8,7 +8,6 @@ import {
 import "./Signin.css";
 import {login} from "../util/ApiUtil";
 
-/*global FB*/
 
 const Signin = (props) => {
   const [loading, setLoading] = useState(false);

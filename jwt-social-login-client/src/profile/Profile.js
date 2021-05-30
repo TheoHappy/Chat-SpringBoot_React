@@ -1,5 +1,5 @@
 import React, {useEffect} from "react";
-import {Card, Avatar} from "antd";
+import {Card, Avatar, Button} from "antd";
 import {useRecoilState} from "recoil";
 import {loggedInUser} from "../atom/globalState";
 import {LogoutOutlined} from "@ant-design/icons";
@@ -52,7 +52,16 @@ const Profile = (props) => {
                     title={currentUser.name}
                     description={"@" + currentUser.username}
                 />
-                <button onClick={toChat}>Open Chat</button>
+                {/*<button class="login-form-button" onClick={toChat}>Open Chat</button>*/}
+                <br/>
+                <Button
+                    shape="round"
+                    size="large"
+                    className="login-form-button"
+                    onClick={toChat}
+                >
+                    Open Chat
+                </Button>
             </Card>
         </div>
     );
